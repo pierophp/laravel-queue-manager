@@ -1,25 +1,26 @@
 {
-    "name": "pierophp/laravel-queue-manager",
-    "description": "Laravel Queue Manager",
-    "authors": [
-        {
-            "name": "Piero Giusti",
-            "email": "pierophp@gmail.com"
-        },
-        {
-            "name": "Kleber Nascimento",
-            "email": "kleber.ncto@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "LaravelQueueManager\\": "src/"
-        }
+  "name": "pierophp/laravel-queue-manager",
+  "description": "Laravel Queue Manager",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Piero Giusti",
+      "email": "pierophp@gmail.com"
     },
-    "require": {
-        "illuminate/queue": "^5.3",
-        "illuminate/bus": "^5.3",
-        "illuminate/view": "^5.3",
-        "illuminate/database": "^5.3"
+    {
+      "name": "Kleber Nascimento",
+      "email": "kleber.ncto@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "LaravelQueueManager\\": "src/"
+    }
+  },
+  "require": {
+    "illuminate/queue": "^5.3",
+    "illuminate/bus": "^5.3",
+    "illuminate/view": "^5.3",
+    "illuminate/database": "^5.3"
+  }
 }
