@@ -27,7 +27,7 @@ class SupervisorGenerator
             $supervisorConfigOld = file_get_contents($filename);
         }
 
-        //if ($supervisorConfigOld != $supervisorConfig) {
+        if ($supervisorConfigOld != $supervisorConfig) {
 
             file_put_contents($filename, $supervisorConfig);
 
@@ -37,22 +37,17 @@ class SupervisorGenerator
             $process->run();
 
             if (!$process->isSuccessful()) {
-
                 event(new ScheduleError($process->getOutput(), ['command' => 'reread']));
-
-                //\BusinessLogger::error('supervisor_generator_error', );
             }
 
             $process = new Process($supervisorBin . ' update');
-            $process->setTimeout(600);
+            $process->setTimeout(config('queue_manager.supervisor_update_timeout'));
             $process->run();
 
-           // if (!$process->isSuccessful()) {
-                new ScheduleError($process->getOutput(), ['command' => 'update']);
-                //event();
+            if (!$process->isSuccessful()) {
+                event(new ScheduleError($process->getOutput(), ['command' => 'update']));
+            }
 
-            //}
-
-       // }
+        }
     }
 }
