@@ -1,1 +1,1 @@
-# laravel-queue-manager
+# Laravel Queue Manager
