@@ -26,6 +26,7 @@ $ php artisan migrate
 ```
 
 ### Add the provider
+Add the provider at the file config/app.php
 ```
 LaravelQueueManager\Providers\LaravelQueueManagerServiceProvider::class,
 ```
@@ -37,8 +38,10 @@ Generate a class that extends LaravelQueueManager\AbstractJob.
 
 It's necessary implement 2 methods:
 
-getName() - The name of the job
-execute() - The code of the job
+| Method | Description |
+| --- | --- |
+| getName() | The name of the job |
+| execute() | The code of the job yourself |
 
 ### Dispatching a new job
 Create a new instance of your job and call the dispatch() method.
@@ -61,7 +64,7 @@ To the job works, is necessary generate a row in the queue_config table.
 
 ### Config
 
-At the queue_manager.php config file you can:
+At the queue_manager.php config file you can configure:
 
 | Field | Description |
 | --- | --- |
@@ -71,9 +74,9 @@ At the queue_manager.php config file you can:
 | supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change |
 
 ### Getting error events
-Add to your AppServiceProvider
+Add to your AppServiceProvider e log as you like
 ```php
-$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError; $scheduleError){
+$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $scheduleError){
             
 });
 ```
