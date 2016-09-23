@@ -2,6 +2,8 @@
 
 namespace LaravelQueueManager\Core;
 
+use Illuminate\Support\Facades\View;
+use LaravelQueueManager\Events\ScheduleError;
 use LaravelQueueManager\Repository\QueueConfigRepository;
 use Symfony\Component\Process\Process;
 
@@ -16,31 +18,41 @@ class SupervisorGenerator
 
     public function generate()
     {
-        $supervisorConfig = view('system/supervisor-generator', ['configs' => $this->queueConfigRepository->findBy([])]);
+        $supervisorConfig = View::make('laravel_queue_manager::supervisor-generator', ['configs' => $this->queueConfigRepository->findAll()]);
 
-        $filename = '/etc/supervisor/conf.d/laravel-queue.conf';
+        $filename = config('queue_manager.supervisor_config_file');
 
-        $supervisorConfigOld = file_get_contents($filename);
+        $supervisorConfigOld = '';
+        if (file_exists($filename)) {
+            $supervisorConfigOld = file_get_contents($filename);
+        }
 
-        if ($supervisorConfigOld != $supervisorConfig) {
+        //if ($supervisorConfigOld != $supervisorConfig) {
 
             file_put_contents($filename, $supervisorConfig);
 
-            $process = new Process('/usr/bin/supervisorctl reread');
+            $supervisorBin = config('queue_manager.supervisor_bin');
+
+            $process = new Process($supervisorBin . ' reread');
             $process->run();
 
             if (!$process->isSuccessful()) {
-                \BusinessLogger::error('supervisor_generator_error', $process->getOutput(), ['command' => 'reread']);
+
+                event(new ScheduleError($process->getOutput(), ['command' => 'reread']));
+
+                //\BusinessLogger::error('supervisor_generator_error', );
             }
 
-            $process = new Process('/usr/bin/supervisorctl update');
+            $process = new Process($supervisorBin . ' update');
             $process->setTimeout(600);
             $process->run();
 
-            if (!$process->isSuccessful()) {
-                \BusinessLogger::error('supervisor_generator_error', $process->getOutput(), ['command' => 'reread']);
-            }
+           // if (!$process->isSuccessful()) {
+                new ScheduleError($process->getOutput(), ['command' => 'update']);
+                //event();
 
-        }
+            //}
+
+       // }
     }
 }

@@ -3,10 +3,11 @@
 namespace LaravelQueueManager\Core;
 
 use Illuminate\Console\Scheduling\Schedule;
+use LaravelQueueManager\Repository\QueueConfigRepository;
 
 class Scheduler
 {
-    public function schedule(Schedule $schedule)
+    public static function schedule(Schedule $schedule)
     {
         $schedulableQueues = QueueConfigRepository::findSchedulables();
 

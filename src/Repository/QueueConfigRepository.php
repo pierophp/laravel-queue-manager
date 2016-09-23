@@ -11,6 +11,10 @@ use LaravelQueueManager\Model\QueueConfig;
  */
 final class QueueConfigRepository
 {
+    public static function findAll()
+    {
+        return QueueConfig::where([])->get();
+    }
 
     public static function findActives()
     {

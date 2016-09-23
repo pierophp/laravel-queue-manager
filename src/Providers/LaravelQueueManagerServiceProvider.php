@@ -2,8 +2,11 @@
 
 namespace LaravelQueueManager\Providers;
 
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use LaravelQueueManager\Console\Commands\GenerateCommand;
+use LaravelQueueManager\Core\Scheduler;
 
 class LaravelQueueManagerServiceProvider extends ServiceProvider
 {
@@ -13,12 +16,21 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('queue_manager.php'),
+            __DIR__ . '/../config/config.php' => config_path('queue_manager.php'),
         ], 'config');
 
-        $this->bootBindings();
+        View::addNamespace('laravel_queue_manager', __DIR__ . '/../resources/views');
 
+        $this->schedule();
         $this->commands('queue_manager.generate');
+    }
+
+    public function schedule()
+    {
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            Scheduler::schedule($schedule);
+        });
     }
 
     /**
@@ -30,7 +42,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
     {
         $this->registerCommand();
 
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'queue_manager');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'queue_manager');
     }
 
     /**
