@@ -53,7 +53,7 @@ To the job works, is necessary generate a row in the queue_config table.
 | Field | Description |
 | --- | --- |
 | name | It's the same of the return of getName() method. |
-| class_name | The full path with namespace of your job class (\App\jobs\TestJob) |
+| class_name | The full path with namespace of your job class (\App\Jobs\TestJob) |
 | active | If the job is active or not |
 | schedulable | If the job is schedulable or not |
 | schedule_config | A JSON config of the schedule. {"method" : "The schedule methods from laravel", "params": "The params to the schedule method (optional)"}|
@@ -74,7 +74,7 @@ At the queue_manager.php config file you can configure:
 | supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change |
 
 ### Getting error events
-Add to your AppServiceProvider e log as you like
+Add to your AppServiceProvider and log as you like
 ```php
 $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $scheduleError){
             
