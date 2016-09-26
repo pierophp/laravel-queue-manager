@@ -31,6 +31,16 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
 
     public function schedule()
     {
+        $command = \Request::server('argv', null);
+
+        if (!isset($command[1])) {
+            return;
+        }
+
+        if ($command[1] != 'schedule:run') {
+            return;
+        }
+
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
             Scheduler::schedule($schedule);
