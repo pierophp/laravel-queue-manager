@@ -3,6 +3,7 @@
 namespace LaravelQueueManager\Core;
 
 use Illuminate\Console\Scheduling\Schedule;
+use LaravelQueueManager\Events\ScheduleError;
 use LaravelQueueManager\Repository\QueueConfigRepository;
 
 class Scheduler
@@ -16,8 +17,7 @@ class Scheduler
             $scheduleConfig = json_decode($schedulableQueue->schedule_config);
 
             if (!isset($scheduleConfig->method)) {
-                // @todo Implement event
-                \BusinessLogger::error('queue_schedule_error', 'Method not configured for ' . $schedulableQueue->name);
+                event(new ScheduleError('Method not configured for ' . $schedulableQueue->name, ['command' => 'reread']));
                 continue;
             }
 

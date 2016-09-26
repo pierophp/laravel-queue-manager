@@ -19,9 +19,10 @@
     }
   },
   "require": {
-    "illuminate/queue": "^5.3",
     "illuminate/bus": "^5.3",
-    "illuminate/view": "^5.3",
-    "illuminate/database": "^5.3"
+    "illuminate/database": "^5.3",
+    "illuminate/http": "^5.3",
+    "illuminate/queue": "^5.3",
+    "illuminate/view": "^5.3"
   }
 }
