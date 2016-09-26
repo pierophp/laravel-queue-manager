@@ -3,7 +3,7 @@ The Laravel Queue Manager manage the queue process worker.
 
 It uses [Supervisor](http://supervisord.org/) as Process Control System.
 
-It also has a scheduler system built in. 
+It also has a scheduler system built-in. 
 
 ## Installation
 
