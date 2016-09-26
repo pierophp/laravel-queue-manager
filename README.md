@@ -66,12 +66,12 @@ To the job works, is necessary generate a row in the queue_config table.
 
 At the queue_manager.php config file you can configure:
 
-| Field | Description |
-| --- | --- |
-| supervisor_config_file | The supervisor config file |
-| supervisor_bin | The supervisor bin path |
-| supervisor_user | The supervisor user |
-| supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change |
+| Field | Description | Default |
+| --- | --- | --- |
+| supervisor_config_file | The supervisor config file | /etc/supervisor/conf.d/laravel-queue.conf |
+| supervisor_bin | The supervisor bin path | /usr/bin/supervisorctl |
+| supervisor_user | The supervisor user | docker |
+| supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change | 600 |
 
 ### Getting error events
 Add to your AppServiceProvider and log as you like
