@@ -25,4 +25,9 @@ final class QueueConfigRepository
     {
         return QueueConfig::where(['active' => true, 'schedulable' => true])->get();
     }
+
+    public static function findOneByName($name)
+    {
+        return QueueConfig::where(['name' => $name])->get()->first();
+    }
 }

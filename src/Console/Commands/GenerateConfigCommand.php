@@ -5,14 +5,14 @@ namespace LaravelQueueManager\Console\Commands;
 use LaravelQueueManager\Core\SupervisorGenerator;
 use Illuminate\Console\Command;
 
-class GenerateCommand extends Command
+class GenerateConfigCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'queue_manager:generate';
+    protected $signature = 'queue-manager:generate-config';
 
     /**
      * The console command description.

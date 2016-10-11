@@ -44,7 +44,12 @@ It's necessary implement 2 methods:
 | execute() | The code of the job yourself |
 
 ### Dispatching a new job
-Create a new instance of your job and call the dispatch() method.
+Create a new instance of your job and call the dispatch() method. 
+
+Or use the CLI:
+```bash
+$ php artisan queue-manager:generate-queue queue_name
+```
 
 ### Database
 
@@ -87,7 +92,7 @@ $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, f
 Configure a cron to run as root every minute to generate the supervisor config
 
 ```bash
-$ php artisan queue_manager:generate
+$ php artisan queue-manager:generate-config
 ```
 
 ### Scheduler
