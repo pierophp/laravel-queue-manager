@@ -36,6 +36,13 @@ abstract class AbstractJob implements ShouldQueue
         dispatch($this->onQueue($this->getName()));
     }
 
+    final public function setProps($props)
+    {
+        foreach ($props as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
     /**
      * @return mixed
      */
@@ -43,6 +50,5 @@ abstract class AbstractJob implements ShouldQueue
     {
         return $this->uid;
     }
-
 
 }

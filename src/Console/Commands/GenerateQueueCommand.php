@@ -14,7 +14,7 @@ class GenerateQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'queue-manager:generate-queue {name}';
+    protected $signature = 'queue-manager:generate-queue {name} {props?}';
 
     /**
      * The console command description.
@@ -41,11 +41,31 @@ class GenerateQueueCommand extends Command
     public function handle()
     {
         $name = $this->argument('name');
+        $props = $this->getProps();
+
         $queueConfig = QueueConfigRepository::findOneByName($name);
         $className = $queueConfig->class_name;
 
         /** @var AbstractJob $queue */
         $queue = new $className;
+        $queue->setProps($props);
         $queue->dispatch();
+    }
+
+    private function getProps()
+    {
+        $props = explode(',', $this->argument('props'));
+        $parsedProps = [];
+        foreach ($props as $prop) {
+            $prop = explode('=', $prop);
+
+            if (count($prop) < 2) {
+                throw new \OutOfBoundsException("{$prop[0]} is invalid");
+            }
+
+            $parsedProps[$prop[0]] = $prop[1];
+        }
+
+        return $parsedProps;
     }
 }

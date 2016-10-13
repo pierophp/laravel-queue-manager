@@ -51,6 +51,11 @@ Or use the CLI:
 $ php artisan queue-manager:generate-queue queue_name
 ```
 
+You can set optional params too:
+```bash
+$ php artisan queue-manager:generate-queue queue_name foo=test,bar=test
+```
+
 ### Database
 
 To the job works, is necessary generate a row in the queue_config table.
