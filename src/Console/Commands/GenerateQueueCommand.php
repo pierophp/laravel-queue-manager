@@ -54,8 +54,13 @@ class GenerateQueueCommand extends Command
 
     private function getProps()
     {
-        $props = explode(',', $this->argument('props'));
+        $props = [];
+        if ($this->argument('props')) {
+            $props = explode(',', $this->argument('props'));
+        }
+
         $parsedProps = [];
+
         foreach ($props as $prop) {
             $prop = explode('=', $prop);
 
