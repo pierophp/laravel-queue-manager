@@ -44,6 +44,10 @@ class GenerateQueueCommand extends Command
         $props = $this->getProps();
 
         $queueConfig = QueueConfigRepository::findOneByName($name);
+        if(!$queueConfig){
+            throw new \Exception('Record not found for table queue_config for name ' . $name);
+        }
+
         $className = $queueConfig->class_name;
 
         /** @var AbstractJob $queue */

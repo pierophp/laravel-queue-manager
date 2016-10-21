@@ -71,6 +71,7 @@ To the job works, is necessary generate a row in the queue_config table.
 | max_instances | The max parallel instances of the queue |
 | timeout | The timeout of the queue |
 | delay | The delay to the next execution (Not implemented yet) |
+| connection | The connection name of the queue provider. (If null = default)
 
 ### Config
 

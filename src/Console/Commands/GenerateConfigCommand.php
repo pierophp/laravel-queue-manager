@@ -39,5 +39,6 @@ class GenerateConfigCommand extends Command
     public function handle(SupervisorGenerator $generator)
     {
         $generator->generate();
+        $this->info('Configuration generated in the ' . $generator->getFilename() . ' file!');
     }
 }

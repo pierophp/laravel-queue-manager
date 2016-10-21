@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use LaravelQueueManager\Repository\QueueConfigRepository;
 
 abstract class AbstractJob implements ShouldQueue
 {
@@ -33,6 +34,10 @@ abstract class AbstractJob implements ShouldQueue
     {
         $this->uid = uniqid();
 
+        if ($this->getConectionName() != 'default') {
+            $this->onConnection($this->getConectionName());
+        }
+
         dispatch($this->onQueue($this->getName()));
     }
 
@@ -49,6 +54,20 @@ abstract class AbstractJob implements ShouldQueue
     public function getUid()
     {
         return $this->uid;
+    }
+
+    public function getConectionName()
+    {
+        $queueConfig = QueueConfigRepository::findOneByName($this->getName());
+        if (!$queueConfig) {
+            return 'default';
+        }
+
+        if ($queueConfig->connection) {
+            return $queueConfig->connection;
+        }
+
+        return 'default';
     }
 
 }

@@ -25,6 +25,10 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
             __DIR__ . '/../migrations/2016_09_22_172624_create_queue_configs_table.php' => database_path('migrations/2016_09_22_172624_create_queue_configs_table.php'),
         ]);
 
+        $this->publishes([
+            __DIR__ . '/../migrations/2016_10_21_153409_queue_config_add_connection.php' => database_path('migrations/2016_10_21_153409_queue_config_add_connection.php'),
+        ]);
+
         View::addNamespace('laravel_queue_manager', __DIR__ . '/../resources/views');
 
         $this->schedule();
