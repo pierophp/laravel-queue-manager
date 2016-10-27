@@ -34,8 +34,10 @@ abstract class AbstractJob implements ShouldQueue
     {
         $this->uid = uniqid();
 
-        if ($this->getConectionName() != 'default') {
-            $this->onConnection($this->getConectionName());
+        $connectionName = $this->getConectionName();
+
+        if ($connectionName != 'default') {
+            $this->onConnection($connectionName);
         }
 
         dispatch($this->onQueue($this->getName()));

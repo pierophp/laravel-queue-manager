@@ -5,7 +5,6 @@ namespace LaravelQueueManager\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use LaravelQueueManager\Console\Commands\GenerateCommand;
 use LaravelQueueManager\Console\Commands\GenerateConfigCommand;
 use LaravelQueueManager\Console\Commands\GenerateQueueCommand;
 use LaravelQueueManager\Core\Scheduler;
