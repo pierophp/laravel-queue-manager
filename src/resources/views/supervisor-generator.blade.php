@@ -1,7 +1,7 @@
 @foreach($configs as $config)
 [program:laravel-worker-{{$config->name}}]
 process_name=%(program_name)s_%(process_num)02d
-command=php {{config('queue_manager.artisan_path')}} queue:work --queue={{$config->name}} --sleep={{ (int)$config->delay }} --tries={{ $config->max_attempts ? $config->max_attempts : 5 }} --timeout={{ $config->timeout ? $config->timeout : 0 }}
+command=php {{config('queue_manager.artisan_path')}} queue:work --queue={{$config->name}} --sleep={{ (int)$config->delay }} --tries={{ $config->max_attempts ? $config->max_attempts : 5 }} --timeout={{ $config->timeout ? $config->timeout : 0 }} {{ $config->connection ? $config->connection : 'default' }}
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}

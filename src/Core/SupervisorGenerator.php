@@ -11,25 +11,26 @@ class SupervisorGenerator
 {
     protected $queueConfigRepository;
 
+    protected $filename;
+
     public function __construct(QueueConfigRepository $queueConfigRepository)
     {
         $this->queueConfigRepository = $queueConfigRepository;
+        $this->filename = config('queue_manager.supervisor_config_file');
     }
 
     public function generate()
     {
         $supervisorConfig = View::make('laravel_queue_manager::supervisor-generator', ['configs' => $this->queueConfigRepository->findAll()]);
 
-        $filename = config('queue_manager.supervisor_config_file');
-
         $supervisorConfigOld = '';
-        if (file_exists($filename)) {
-            $supervisorConfigOld = file_get_contents($filename);
+        if (file_exists($this->filename)) {
+            $supervisorConfigOld = file_get_contents($this->filename);
         }
 
         if ($supervisorConfigOld != $supervisorConfig) {
 
-            file_put_contents($filename, $supervisorConfig);
+            file_put_contents($this->filename, $supervisorConfig);
 
             $supervisorBin = config('queue_manager.supervisor_bin');
 
@@ -50,4 +51,13 @@ class SupervisorGenerator
 
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
 }

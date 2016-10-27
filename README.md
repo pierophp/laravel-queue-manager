@@ -3,7 +3,7 @@ The Laravel Queue Manager manage the queue process worker.
 
 It uses [Supervisor](http://supervisord.org/) as Process Control System.
 
-It also has as scheduler system built in. 
+It also has a scheduler system built-in. 
 
 ## Installation
 
@@ -44,7 +44,17 @@ It's necessary implement 2 methods:
 | execute() | The code of the job yourself |
 
 ### Dispatching a new job
-Create a new instance of your job and call the dispatch() method.
+Create a new instance of your job and call the dispatch() method. 
+
+Or use the CLI:
+```bash
+$ php artisan queue-manager:generate-queue queue_name
+```
+
+You can set optional params too:
+```bash
+$ php artisan queue-manager:generate-queue queue_name foo=test,bar=test
+```
 
 ### Database
 
@@ -61,17 +71,18 @@ To the job works, is necessary generate a row in the queue_config table.
 | max_instances | The max parallel instances of the queue |
 | timeout | The timeout of the queue |
 | delay | The delay to the next execution (Not implemented yet) |
+| connection | The connection name of the queue provider. (If null = default)
 
 ### Config
 
 At the queue_manager.php config file you can configure:
 
-| Field | Description |
-| --- | --- |
-| supervisor_config_file | The supervisor config file |
-| supervisor_bin | The supervisor bin path |
-| supervisor_user | The supervisor user |
-| supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change |
+| Field | Description | Default |
+| --- | --- | --- |
+| supervisor_config_file | The supervisor config file | /etc/supervisor/conf.d/laravel-queue.conf |
+| supervisor_bin | The supervisor bin path | /usr/bin/supervisorctl |
+| supervisor_user | The supervisor user | docker |
+| supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change | 600 |
 
 ### Getting error events
 Add to your AppServiceProvider and log as you like
@@ -87,7 +98,7 @@ $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, f
 Configure a cron to run as root every minute to generate the supervisor config
 
 ```bash
-$ php artisan queue_manager:generate
+$ php artisan queue-manager:generate-config
 ```
 
 ### Scheduler
