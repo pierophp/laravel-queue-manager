@@ -79,6 +79,8 @@ At the queue_manager.php config file you can configure:
 
 | Field | Description | Default |
 | --- | --- | --- |
+| artisan_path | The artisan path | base_path('artisan') |
+| log_path | The logh path | storage_path('logs/worker.log') |
 | supervisor_config_file | The supervisor config file | /etc/supervisor/conf.d/laravel-queue.conf |
 | supervisor_bin | The supervisor bin path | /usr/bin/supervisorctl |
 | supervisor_user | The supervisor user | docker |
