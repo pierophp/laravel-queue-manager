@@ -63,7 +63,7 @@ class ShowJobsCommand extends Command
 
         $this->table(array_keys($table[0]), $table);
         $this->info("\nUsage:");
-        $this->comment("php artisan job_name param1=1,param2=0\n");
+        $this->comment("php artisan queue-manager:generate-queue job_name param1=1,param2=0\n");
 
     }
 
