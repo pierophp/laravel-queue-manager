@@ -86,6 +86,10 @@ At the queue_manager.php config file you can configure:
 | supervisor_user | The supervisor user | docker |
 | supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change | 600 |
 
+### Showing all available jobs
+```bash
+$ php artisan queue-manager:show-jobs
+```
 ### Getting error events
 Add to your AppServiceProvider and log as you like
 ```php
