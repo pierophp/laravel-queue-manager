@@ -1,5 +1,5 @@
 # Laravel Queue Manager
-The Laravel Queue Manager manage the queue process worker. 
+The Laravel Queue Manager, manage the queue process worker. 
 
 It uses [Supervisor](http://supervisord.org/) as Process Control System.
 
@@ -9,7 +9,7 @@ It also has a scheduler system built-in.
 
 ### Composer
 ```bash
-$ composer require pierophp/laravel-queue-manager:dev-master
+$ composer require pierophp/laravel-queue-manager
 ```
 
 ### Publish
@@ -17,16 +17,16 @@ $ composer require pierophp/laravel-queue-manager:dev-master
 $ php artisan vendor:publish --provider="LaravelQueueManager\Providers\LaravelQueueManagerServiceProvider"
 ```
 
-### Run the migration
+### Running the migration
 
-If you have MySQL version before 5.7, change in migration the field "schedule_config" from "json" to "text". 
+If you have MySQL version before 5.7, change in the migration the field "schedule_config" from "json" to "text". 
 
 ```bash
 $ php artisan migrate
 ```
 
-### Add the provider
-Add the provider at the file config/app.php
+### Adding the provider
+You need to add the provider at the file config/app.php
 ```
 LaravelQueueManager\Providers\LaravelQueueManagerServiceProvider::class,
 ```
@@ -34,9 +34,9 @@ LaravelQueueManager\Providers\LaravelQueueManagerServiceProvider::class,
 
 ### Generating a job
 
-Generate a class that extends LaravelQueueManager\AbstractJob.
+You need generate a class that extends LaravelQueueManager\AbstractJob.
 
-It's necessary implement 2 methods:
+It's necessary to implement 2 methods:
 
 | Method | Description |
 | --- | --- |
@@ -44,7 +44,7 @@ It's necessary implement 2 methods:
 | execute() | The code of the job yourself |
 
 ### Dispatching a new job
-Create a new instance of your job and call the dispatch() method. 
+You need create a new instance of your job and call the dispatch() method. 
 
 Or use the CLI:
 ```bash
@@ -58,11 +58,11 @@ $ php artisan queue-manager:generate-queue queue_name foo=test,bar=test
 
 ### Database
 
-To the job works, is necessary generate a row in the queue_config table.
+To the job work correctly, it is necessary generate a row in the queue_config table.
 
 | Field | Description |
 | --- | --- |
-| name | It's the same of the return of getName() method. |
+| name | It's the same of the return of the getName() method. |
 | class_name | The full path with namespace of your job class (\App\Jobs\TestJob) |
 | active | If the job is active or not |
 | schedulable | If the job is schedulable or not |
@@ -80,7 +80,7 @@ At the queue_manager.php config file you can configure:
 | Field | Description | Default |
 | --- | --- | --- |
 | artisan_path | The artisan path | base_path('artisan') |
-| log_path | The logh path | storage_path('logs/worker.log') |
+| log_path | The log path | storage_path('logs/worker.log') |
 | supervisor_config_file | The supervisor config file | /etc/supervisor/conf.d/laravel-queue.conf |
 | supervisor_bin | The supervisor bin path | /usr/bin/supervisorctl |
 | supervisor_user | The supervisor user | docker |
@@ -91,24 +91,24 @@ At the queue_manager.php config file you can configure:
 $ php artisan queue-manager:show-jobs
 ```
 ### Getting error events
-Add to your AppServiceProvider and log as you like
+You need add to your AppServiceProvider and log as you like
 ```php
 $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $scheduleError){
             
 });
 ```
 
-## Deploy
+## Deploying
 
 ### Supervisor config
-Configure a cron to run as root every minute to generate the supervisor config
+You need configure a cron to run as root every minute to generate the supervisor config
 
 ```bash
 $ php artisan queue-manager:generate-config
 ```
 
 ### Scheduler
-Configure a cron to run every minute to generate the scheduler
+You need configure a cron to run every minute to generate the scheduler
 ```bash
 $ php artisan schedule:run
 ```
