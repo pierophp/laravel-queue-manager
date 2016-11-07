@@ -19,6 +19,7 @@
     }
   },
   "require": {
+    "php": ">=7.0.0",
     "illuminate/bus": "^5.3",
     "illuminate/database": "^5.3",
     "illuminate/http": "^5.3",
