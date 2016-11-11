@@ -20,6 +20,10 @@ abstract class AbstractJob implements ShouldQueue
 
     private function preventKillProcess()
     {
+        if (php_sapi_name() !== 'cli') {
+            return;
+        }
+
         pcntl_signal(SIGINT, function () {
         });
     }
