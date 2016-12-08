@@ -5,6 +5,7 @@ namespace LaravelQueueManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Queue\SerializesModels;
 use LaravelQueueManager\Repository\QueueConfigRepository;
 
@@ -28,9 +29,22 @@ abstract class AbstractJob implements ShouldQueue
         });
     }
 
+    private function reconnectDb()
+    {
+        if ($this->job instanceof SyncJob) {
+            return;
+        }
+
+        $connections = \Db::getConnections();
+        foreach ($connections as $connectionName => $connection) {
+            \Db::reconnect($connectionName);
+        }
+    }
+
     final public function handle()
     {
         $this->preventKillProcess();
+        $this->reconnectDb();
         $this->execute();
     }
 
