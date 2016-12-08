@@ -35,9 +35,9 @@ abstract class AbstractJob implements ShouldQueue
             return;
         }
 
-        $connections = \Db::getConnections();
+        $connections = \DB::getConnections();
         foreach ($connections as $connectionName => $connection) {
-            \Db::reconnect($connectionName);
+            \DB::reconnect($connectionName);
         }
     }
 
