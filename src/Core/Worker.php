@@ -3,7 +3,6 @@
 namespace LaravelQueueManager\Core;
 
 use Exception;
-use function GuzzleHttp\json_encode;
 use Throwable;
 use Illuminate\Queue\Worker as LaravelWorker;
 use Illuminate\Queue\WorkerOptions;
