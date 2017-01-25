@@ -8,7 +8,9 @@ use Illuminate\Support\ServiceProvider;
 use LaravelQueueManager\Console\Commands\GenerateConfigCommand;
 use LaravelQueueManager\Console\Commands\GenerateQueueCommand;
 use LaravelQueueManager\Console\Commands\ShowJobsCommand;
+use LaravelQueueManager\Console\Commands\WorkCommand;
 use LaravelQueueManager\Core\Scheduler;
+use LaravelQueueManager\Core\Worker;
 
 class LaravelQueueManagerServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         $this->commands('queue-manager.generate-config');
         $this->commands('queue-manager.generate-queue');
         $this->commands('queue-manager.show-jobs');
+        $this->commands('queue-manager.work');
     }
 
     public function schedule()
@@ -83,5 +86,10 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         $this->app['queue-manager.show-jobs'] = $this->app->share(function () {
             return new ShowJobsCommand();
         });
+
+        $this->app['queue-manager.work'] = $this->app->share(function () {
+            return new WorkCommand(new Worker(resolve('Illuminate\Queue\QueueManager'), resolve('Illuminate\Contracts\Events\Dispatcher'), resolve('Illuminate\Contracts\Debug\ExceptionHandler')));
+        });
+
     }
 }

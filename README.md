@@ -85,6 +85,8 @@ At the queue_manager.php config file you can configure:
 | supervisor_bin | The supervisor bin path | /usr/bin/supervisorctl |
 | supervisor_user | The supervisor user | docker |
 | supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change | 600 |
+| execute_as_api | Enable the queue as API mode | false |
+| api_url | URL to run the queue as API mode | http://127.0.0.1/queue/process |
 
 ### Showing all available jobs
 ```bash
@@ -118,3 +120,15 @@ Every time you change the PHP code, it's necessary to restart the queues. Put th
 ```bash
 $ php artisan queue:restart
 ```
+
+## API Mode
+### Introduction
+To easily scale your jobs machine, you can run the queues in API mode. An API is much more easy to apply auto-scale.
+
+### Configuration
+In your route configuration file add:
+```php
+$api->post('queue/process', 'LaravelQueueManager\Http\Controllers\QueueController@process');
+```
+
+Edit in your "queue_manager.php" config file the execute_as_api and api_url options.
