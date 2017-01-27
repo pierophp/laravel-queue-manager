@@ -38,7 +38,12 @@ class GenerateConfigCommand extends Command
      */
     public function handle(SupervisorGenerator $generator)
     {
-        $generator->generate();
+        try {
+            $generator->generate();
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+        }
+
         $this->info('Configuration generated in the ' . $generator->getFilename() . ' file!');
     }
 }
