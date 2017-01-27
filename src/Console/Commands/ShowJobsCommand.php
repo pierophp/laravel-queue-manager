@@ -61,7 +61,12 @@ class ShowJobsCommand extends Command
             ];
         }
 
-        $this->table(array_keys($table[0]), $table);
+        if (count($table)) {
+            $this->table(array_keys($table[0]), $table);
+        } else {
+            $this->info("\nNo results found");
+        }
+
         $this->info("\nUsage:");
         $this->comment("php artisan queue-manager:generate-queue job_name param1=1,param2=0\n");
 

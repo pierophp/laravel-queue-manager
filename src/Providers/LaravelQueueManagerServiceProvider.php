@@ -3,7 +3,6 @@
 namespace LaravelQueueManager\Providers;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use LaravelQueueManager\Console\Commands\GenerateConfigCommand;
 use LaravelQueueManager\Console\Commands\GenerateQueueCommand;
@@ -31,7 +30,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
             __DIR__ . '/../migrations/2016_10_21_153409_queue_config_add_connection.php' => database_path('migrations/2016_10_21_153409_queue_config_add_connection.php'),
         ]);
 
-        View::addNamespace('laravel_queue_manager', __DIR__ . '/../resources/views');
+        \View::addNamespace('laravel_queue_manager', __DIR__ . '/../resources/views');
 
         $this->schedule();
         $this->commands('queue-manager.generate-config');
@@ -75,21 +74,20 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
      */
     protected function registerCommand()
     {
-        $this->app['queue-manager.generate-config'] = $this->app->share(function () {
+        $this->app->singleton('queue-manager.generate-config', function () {
             return new GenerateConfigCommand();
         });
 
-        $this->app['queue-manager.generate-queue'] = $this->app->share(function () {
+        $this->app->singleton('queue-manager.generate-queue', function () {
             return new GenerateQueueCommand();
         });
 
-        $this->app['queue-manager.show-jobs'] = $this->app->share(function () {
+        $this->app->singleton('queue-manager.show-jobs', function () {
             return new ShowJobsCommand();
         });
 
-        $this->app['queue-manager.work'] = $this->app->share(function () {
+        $this->app->singleton('queue-manager.work', function () {
             return new WorkCommand(new Worker(resolve('Illuminate\Queue\QueueManager'), resolve('Illuminate\Contracts\Events\Dispatcher'), resolve('Illuminate\Contracts\Debug\ExceptionHandler')));
         });
-
     }
 }
