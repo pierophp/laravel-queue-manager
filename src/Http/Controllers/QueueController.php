@@ -20,7 +20,7 @@ class QueueController extends Controller
             $service = unserialize($data->data->command);
             $service->execute();
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
 
             $response = [
                 'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR,
