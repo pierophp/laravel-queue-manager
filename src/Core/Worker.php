@@ -81,7 +81,7 @@ class Worker extends LaravelWorker
             throw new \Exception($curlResponse);
         }
 
-        if ($response->status_code !== 200) {
+        if ($response->status_code != 200) {
             throw new \Exception($response->error_description, $response->error_code);
         }
 
