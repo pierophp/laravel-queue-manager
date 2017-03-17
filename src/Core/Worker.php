@@ -76,6 +76,10 @@ class Worker extends LaravelWorker
         }
 
         $response = json_decode($curlResponse);
+        
+        if (!$response) {
+            throw new \Exception($curlResponse);
+        }
 
         if ($response->status_code !== 200) {
             throw new \Exception($response->error_description, $response->error_code);
