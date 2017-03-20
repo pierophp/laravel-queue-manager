@@ -13,17 +13,17 @@ final class QueueConfigRepository
 {
     public static function findAll()
     {
-        return QueueConfig::where([])->get();
+        return QueueConfig::where([])->get()->orderBy('name');
     }
 
     public static function findActives()
     {
-        return QueueConfig::where(['active' => true])->get();
+        return QueueConfig::where(['active' => true])->get()->orderBy('name');
     }
 
     public static function findSchedulables()
     {
-        return QueueConfig::where(['active' => true, 'schedulable' => true])->get();
+        return QueueConfig::where(['active' => true, 'schedulable' => true])->get()->orderBy('name');
     }
 
     public static function findOneByName($name)
