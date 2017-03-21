@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'timeout' => 60 * 30, // 30 minutes
     'artisan_path' => base_path('artisan'),
     'log_path' => storage_path('logs/worker.log'),
     'execute_as_api' => false,
