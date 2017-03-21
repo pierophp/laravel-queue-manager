@@ -16,6 +16,9 @@ class QueueController extends Controller
     public function process(Request $request)
     {
         try {
+            
+            set_time_limit(config('queue_manager.timeout'));
+            
             $data = json_decode($request->get('data'));
             $service = unserialize($data->data->command);
             $service->execute();
