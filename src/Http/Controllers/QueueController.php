@@ -21,6 +21,11 @@ class QueueController extends Controller
             
             $data = json_decode($request->get('data'));
             $service = unserialize($data->data->command);
+            
+            if (extension_loaded('newrelic')) {
+                newrelic_name_transaction('queue.' . $service->getName());
+            }
+            
             $service->execute();
 
         } catch (\Throwable $e) {
