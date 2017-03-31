@@ -15,5 +15,4 @@ class ScheduleError
         $this->context = $context;
     }
 
-
 }

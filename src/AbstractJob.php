@@ -15,6 +15,8 @@ abstract class AbstractJob implements ShouldQueue
 
     protected $uid;
 
+    private $connectionName;
+
     abstract function execute();
 
     abstract function getName();
@@ -76,8 +78,17 @@ abstract class AbstractJob implements ShouldQueue
         return $this->uid;
     }
 
+    public function setConectionName($connectionName)
+    {   
+        $this->connectionName = $connectionName;
+    }
+
     public function getConectionName()
-    {
+    {   
+        if ($this->connectionName) {
+            return $this->connectionName;
+        }
+
         $queueConfig = QueueConfigRepository::findOneByName($this->getName());
         if (!$queueConfig) {
             return 'default';

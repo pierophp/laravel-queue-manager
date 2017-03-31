@@ -11,6 +11,8 @@ use LaravelQueueManager\Model\QueueConfig;
  */
 final class QueueConfigRepository
 {
+    protected static $queuesByName;
+
     public static function findAll()
     {
         return QueueConfig::where([])->orderBy('name')->get();
@@ -28,6 +30,10 @@ final class QueueConfigRepository
 
     public static function findOneByName($name)
     {
-        return QueueConfig::where(['name' => $name])->get()->first();
+        if (!isset(self::$queuesByName[$name])) {
+            self::$queuesByName[$name] = QueueConfig::where(['name' => $name])->get()->first();
+        }
+
+        return self::$queuesByName[$name];
     }
 }

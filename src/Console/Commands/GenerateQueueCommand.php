@@ -14,7 +14,7 @@ class GenerateQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'queue-manager:generate-queue {name} {props?}';
+    protected $signature = 'queue-manager:generate-queue {name} {props?} --connection=';
 
     /**
      * The console command description.
@@ -53,6 +53,9 @@ class GenerateQueueCommand extends Command
         /** @var AbstractJob $queue */
         $queue = new $className;
         $queue->setProps($props);
+        if ($this->option('connection')) {
+            $queue->setConnectionName($this->option('connection'));
+        }
         $queue->dispatch();
     }
 
