@@ -14,7 +14,7 @@ class GenerateQueueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'queue-manager:generate-queue {name} {props?} --connection=';
+    protected $signature = 'queue-manager:generate-queue {name} {props?} {--connection=}';
 
     /**
      * The console command description.
