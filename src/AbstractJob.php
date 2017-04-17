@@ -78,7 +78,7 @@ abstract class AbstractJob implements ShouldQueue
         return $this->uid;
     }
 
-    public function setConectionName($connectionName)
+    public function setConnectionName($connectionName)
     {   
         $this->connectionName = $connectionName;
     }
