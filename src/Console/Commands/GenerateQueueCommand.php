@@ -53,7 +53,7 @@ class GenerateQueueCommand extends Command
         /** @var AbstractJob $queue */
         $queue = new $className;
         $queue->setProps($props);
-        if ($this->option('connection')) {
+        if ($this->hasOption('connection')) {
             $queue->setConnectionName($this->option('connection'));
         }
         $queue->dispatch();
