@@ -60,7 +60,7 @@ abstract class AbstractJob implements ShouldQueue
             $this->onConnection($connectionName);
         }
 
-        dispatch($this->onQueue($this->getName()));
+        return dispatch($this->onQueue($this->getName()));
     }
 
     final public function setProps($props)
