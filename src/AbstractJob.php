@@ -17,9 +17,17 @@ abstract class AbstractJob implements ShouldQueue
 
     private $connectionName;
 
+    protected $name;
+
     abstract function execute();
 
-    abstract function getName();
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
 
     private function preventKillProcess()
     {
@@ -66,6 +74,9 @@ abstract class AbstractJob implements ShouldQueue
     final public function setProps($props)
     {
         foreach ($props as $key => $value) {
+            if ($value instanceof \stdClass) {
+                $value = json_encode($value);
+            }
             $this->$key = $value;
         }
     }

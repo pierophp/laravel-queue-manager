@@ -28,13 +28,20 @@ class Scheduler
                 $params = $scheduleConfig->params;
             }
 
-            $schedule->call(function () use ($schedulableQueue) {
-
+            $schedule->call(function () use ($schedulableQueue, $scheduleConfig) {
                 $className = $schedulableQueue->class_name;
-
-                $job = (new $className());
-                $job->dispatch();
-
+                if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
+                    foreach($scheduleConfig->props as $prop) {
+                        $job = (new $className());    
+                        $job->setName($schedulableQueue->name);
+                        $job->setProps($prop);
+                        $job->dispatch();
+                    }
+                } else {
+                    $job = (new $className());    
+                    $job->setName($schedulableQueue->name);
+                    $job->dispatch();
+                }
             })->$method($params);
         }
     }

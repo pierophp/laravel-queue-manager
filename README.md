@@ -75,7 +75,7 @@ To the job work correctly, it is necessary generate a row in the queue_config ta
 | class_name      | The full path with namespace of your job class (\App\Jobs\TestJob)                                                                        |
 | active          | If the job is active or not                                                                                                               |
 | schedulable     | If the job is schedulable or not                                                                                                          |
-| schedule_config | A JSON config of the schedule. {"method" : "The schedule methods from laravel", "params": "The params to the schedule method (optional)"} |
+| schedule_config | A JSON config of the schedule. {"method" : "The schedule methods from laravel", "params": "The params to the schedule method (optional)", "props": [ { "my_job_prop": 1 }, { "my_job_prop": 2 } ]} |
 | max_attemps     | The max attempts of the queue                                                                                                             |
 | max_instances   | The max parallel instances of the queue                                                                                                   |
 | timeout         | The timeout of the queue                                                                                                                  |
