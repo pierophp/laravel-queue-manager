@@ -36,6 +36,7 @@ abstract class AbstractJob implements ShouldQueue
         }
 
         pcntl_signal(SIGINT, function () {
+            posix_kill(getmypid(), SIGTERM);
         });
     }
 
