@@ -29,17 +29,6 @@ abstract class AbstractJob implements ShouldQueue
         return $this->name;
     }
 
-    private function preventKillProcess()
-    {
-        if (php_sapi_name() !== 'cli') {
-            return;
-        }
-
-        pcntl_signal(SIGINT, function () {
-            posix_kill(getmypid(), SIGTERM);
-        });
-    }
-
     private function reconnectDb()
     {
         if ($this->job instanceof SyncJob) {
@@ -54,7 +43,6 @@ abstract class AbstractJob implements ShouldQueue
 
     final public function handle()
     {
-        $this->preventKillProcess();
         $this->reconnectDb();
         $this->execute();
     }

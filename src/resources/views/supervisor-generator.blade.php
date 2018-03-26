@@ -8,7 +8,7 @@ user={{config('queue_manager.supervisor_user')}}
 numprocs={{ $config->active ? ($config->max_instances ? $config->max_instances : 1) : 0 }}
 redirect_stderr=true
 stdout_logfile={{config('queue_manager.log_path')}}
-stopwaitsecs=600
-stopsignal=INT
+stopwaitsecs={{ $config->timeout ? $config->timeout : 600 }}
+stopsignal=TERM
 
 @endforeach
