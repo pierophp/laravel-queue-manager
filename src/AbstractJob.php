@@ -2,6 +2,7 @@
 
 namespace LaravelQueueManager;
 
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
