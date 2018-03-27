@@ -10,4 +10,5 @@ return [
     'supervisor_bin' => '/usr/bin/supervisorctl',
     'supervisor_user' => 'docker',
     'supervisor_update_timeout' => 600,
+    'fallback_connections' => [],
 ];

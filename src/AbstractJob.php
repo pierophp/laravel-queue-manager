@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Queue\SerializesModels;
 use LaravelQueueManager\Repository\QueueConfigRepository;
+use LaravelQueueManager\Events\DispatchQueueError;
 
 abstract class AbstractJob implements ShouldQueue
 {
@@ -47,17 +48,45 @@ abstract class AbstractJob implements ShouldQueue
         $this->execute();
     }
 
-    final public function dispatch()
+    final public function dispatch($delaySeconds = 0)
     {
         $this->uid = uniqid();
 
         $connectionName = $this->getConectionName();
 
+        $runningConnection = config('queue.default');
         if ($connectionName != 'default') {
+            $runningConnection = $connectionName; 
             $this->onConnection($connectionName);
         }
 
-        return dispatch($this->onQueue($this->getName()));
+        try {
+            $dispatcher = app(Dispatcher::class);
+
+            if ($delaySeconds) {
+                $this->delay = now()->addSeconds($delaySeconds);
+            }
+
+            return $dispatcher->dispatch($this);
+        } catch (\Throwable $e) {
+            
+            event(new DispatchQueueError($e->getMessage(), ['action' => 'queue_dispatch_error']));
+
+            $fallbackConnections = config('queue_manager.fallback_connections');
+            foreach ($fallbackConnections as $fallbackConnection) {
+                if ($fallbackConnection === $runningConnection) {
+                    continue;
+                }
+
+                try {
+                    $this->onConnection($fallbackConnection);
+                    $dispatcher = app(Dispatcher::class);
+                    return $dispatcher->dispatch($this);
+                } catch (\Throwable $e) {}
+            }
+
+            throw $e;
+        }
     }
 
     final public function setProps($props)

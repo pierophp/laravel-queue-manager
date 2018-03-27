@@ -21,7 +21,26 @@ class SupervisorGenerator
 
     public function generate()
     {
-        $supervisorConfig = View::make('laravel_queue_manager::supervisor-generator', ['configs' => $this->queueConfigRepository->findAll()]);
+        $configs = $this->queueConfigRepository->findActives();
+        $fallbackConnections = array_filter(config('queue_manager.fallback_connections'), function($name) {
+            return $name !== 'sync';
+        });
+
+        foreach($configs as $config) {
+            $connectionName = config('queue.default');
+            if ($config->connection && $config->connection !== 'default') {
+                $connectionName = $config->connection; 
+            }
+
+            $config->fallback_connections = array_filter($fallbackConnections, function($name) use($config) {
+                return $name !== $config->connection;
+            });
+        }
+
+        $supervisorConfig = View::make('laravel_queue_manager::supervisor-generator', [
+            'configs' => $configs,
+            'fallbackConnections' => $fallbackConnections,
+        ]);
 
         $supervisorConfigOld = '';
         if (file_exists($this->filename)) {

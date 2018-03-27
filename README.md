@@ -69,19 +69,19 @@ $ php artisan queue-manager:generate-queue queue_name foo=test,bar=test
 
 To the job work correctly, it is necessary generate a row in the queue_config table.
 
-| Field           | Description                                                                                                                               |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| name            | It's the same of the return of the getName() method.                                                                                      |
-| class_name      | The full path with namespace of your job class (\App\Jobs\TestJob)                                                                        |
-| active          | If the job is active or not                                                                                                               |
-| schedulable     | If the job is schedulable or not                                                                                                          |
+| Field           | Description                                                                                                                                                                                        |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name            | It's the same of the return of the getName() method.                                                                                                                                               |
+| class_name      | The full path with namespace of your job class (\App\Jobs\TestJob)                                                                                                                                 |
+| active          | If the job is active or not                                                                                                                                                                        |
+| schedulable     | If the job is schedulable or not                                                                                                                                                                   |
 | schedule_config | A JSON config of the schedule. {"method" : "The schedule methods from laravel", "params": "The params to the schedule method (optional)", "props": [ { "my_job_prop": 1 }, { "my_job_prop": 2 } ]} |
-| max_attemps     | The max attempts of the queue                                                                                                             |
-| max_instances   | The max parallel instances of the queue                                                                                                   |
-| timeout         | The timeout of the queue                                                                                                                  |
-| delay           | The delay to the next execution (Not implemented yet)                                                                                     |
-| connection      | The connection name of the queue provider. (If null = default)                                                                            |
-| aggregator      | The aggregator is used to group the queues in a report                                                                                    |
+| max_attemps     | The max attempts of the queue                                                                                                                                                                      |
+| max_instances   | The max parallel instances of the queue                                                                                                                                                            |
+| timeout         | The timeout of the queue                                                                                                                                                                           |
+| delay           | The delay to the next execution (Not implemented yet)                                                                                                                                              |
+| connection      | The connection name of the queue provider. (If null = default)                                                                                                                                     |
+| aggregator      | The aggregator is used to group the queues in a report                                                                                                                                             |
 
 ### Config
 
@@ -97,6 +97,7 @@ At the queue_manager.php config file you can configure:
 | supervisor_update_timeout | The supervisor update timeout to gracefully stop the process when a configuration change | 600                                       |
 | execute_as_api            | Enable the queue as API mode                                                             | false                                     |
 | api_url                   | URL to run the queue as API mode                                                         | http://127.0.0.1/queue/process            |
+| fallback_connections      | Array of fallback connections when first provider fails to dispatch                      | []                                        |
 
 ### Showing all available jobs
 
@@ -106,11 +107,15 @@ $ php artisan queue-manager:show-jobs
 
 ### Getting error events
 
-You need add to your AppServiceProvider and log as you like
+You need add to your AppServiceProvider and log as you like:
 
 ```php
 $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $scheduleError){
+    // my code
+});
 
+$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\DispatchQueueError $scheduleError){
+    // my code
 });
 ```
 
