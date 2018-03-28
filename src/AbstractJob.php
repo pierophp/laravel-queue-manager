@@ -61,6 +61,8 @@ abstract class AbstractJob implements ShouldQueue
             $this->onConnection($connectionName);
         }
 
+        $this->onQueue($this->getName());
+
         try {
             $dispatcher = app(Dispatcher::class);
 
