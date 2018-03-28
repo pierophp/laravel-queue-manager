@@ -21,7 +21,7 @@ class SupervisorGenerator
 
     public function generate()
     {
-        $configs = $this->queueConfigRepository->findActives();
+        $configs = $this->queueConfigRepository->findAll();
         $fallbackConnections = array_filter(config('queue_manager.fallback_connections'), function($name) {
             return $name !== 'sync';
         });
