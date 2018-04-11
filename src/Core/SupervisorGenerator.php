@@ -22,18 +22,23 @@ class SupervisorGenerator
     public function generate()
     {
         $configs = $this->queueConfigRepository->findAll();
-        $fallbackConnections = array_filter(config('queue_manager.fallback_connections'), function($name) {
+        $fallbackConnections = array_filter(config('queue_manager.fallback_connections'), function ($name) {
             return $name !== 'sync';
         });
 
-        foreach($configs as $config) {
+        foreach ($configs as $config) {
             $connectionName = config('queue.default');
             if ($config->connection && $config->connection !== 'default') {
-                $connectionName = $config->connection; 
+                $connectionName = $config->connection;
             }
 
-            $config->fallback_connections = array_filter($fallbackConnections, function($name) use($config) {
-                return $name !== $config->connection;
+            $config->fallback_connections = array_filter($fallbackConnections, function ($name) use ($config) {
+                $configConnection = $config->connection;
+                if (!$configConnection) {
+                    $configConnection = config('queue.default');
+                }
+
+                return $name !== $configConnection;
             });
         }
 
