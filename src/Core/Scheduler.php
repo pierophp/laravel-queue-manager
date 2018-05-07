@@ -30,6 +30,17 @@ class Scheduler
 
             $schedule->call(function () use ($schedulableQueue, $scheduleConfig) {
                 $className = $schedulableQueue->class_name;
+
+                $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->class_name . '_' . date('Y-m-d-H-i');
+
+                if (\Cache::has($lockKey)) {
+                    return;
+                }
+                
+                $expiresAt = now()->addMinutes(10);
+
+                \Cache::put($lockKey, '1', $expiresAt);
+                
                 if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
                     foreach($scheduleConfig->props as $prop) {
                         $job = (new $className());    
