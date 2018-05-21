@@ -31,7 +31,7 @@ class Scheduler
             $schedule->call(function () use ($schedulableQueue, $scheduleConfig) {
                 $className = $schedulableQueue->class_name;
 
-                $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->class_name . '_' . date('Y-m-d-H-i');
+                $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->name . '_' . date('Y-m-d-H-i');
 
                 if (\Cache::has($lockKey)) {
                     return;
