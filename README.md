@@ -110,11 +110,11 @@ $ php artisan queue-manager:show-jobs
 You need add to your AppServiceProvider and log as you like:
 
 ```php
-$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $scheduleError){
+$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\ScheduleError $error){
     // my code
 });
 
-$this->app['events']->listen(\LaravelQueueManager\Events\DispatchQueueError::class, function(\LaravelQueueManager\Events\DispatchQueueError $scheduleError){
+$this->app['events']->listen(\LaravelQueueManager\Events\DispatchQueueError::class, function(\LaravelQueueManager\Events\DispatchQueueError $error){
     // my code
 });
 ```
