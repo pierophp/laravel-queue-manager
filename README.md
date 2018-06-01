@@ -114,7 +114,7 @@ $this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, f
     // my code
 });
 
-$this->app['events']->listen(\LaravelQueueManager\Events\ScheduleError::class, function(\LaravelQueueManager\Events\DispatchQueueError $scheduleError){
+$this->app['events']->listen(\LaravelQueueManager\Events\DispatchQueueError::class, function(\LaravelQueueManager\Events\DispatchQueueError $scheduleError){
     // my code
 });
 ```
