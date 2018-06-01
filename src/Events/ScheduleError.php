@@ -8,7 +8,7 @@ class ScheduleError
 
     public $context;
 
-    public function __construct($message, $context)
+    public function __construct($message, $context = [])
     {
         $this->message = $message;
 

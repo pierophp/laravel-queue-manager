@@ -19,7 +19,7 @@ class Scheduler
             try {
 
                 if (!isset($scheduleConfig->method)) {
-                    event(new ScheduleError('ScheduleError - Method not configured for ' . $schedulableQueue->name));
+                    event(new ScheduleError('ScheduleError - Method not configured for ' . $schedulableQueue->name, ['queue' => $schedulableQueue->name]));
                     continue;
                 }
 
@@ -59,7 +59,7 @@ class Scheduler
 
 
             } catch (\Throwable $e) {
-                event(new ScheduleError('Schedule Error - ' . $schedulableQueue->name . ' ' . $e->getMessage()));
+                event(new ScheduleError('Schedule Error - ' . $schedulableQueue->name . ' ' . $e->getMessage(), ['queue' => $schedulableQueue->name]));
             }
         }
     }
