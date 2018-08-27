@@ -2,6 +2,7 @@
 
 namespace LaravelQueueManager\Core;
 
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelQueueManager\Events\ScheduleError;
 use LaravelQueueManager\Repository\QueueConfigRepository;
@@ -10,6 +11,8 @@ class Scheduler
 {
     public static function schedule(Schedule $schedule)
     {
+        /** @var Carbon $dateNow */
+        $dateNow = now();
         $schedulableQueues = QueueConfigRepository::findSchedulables();
 
         foreach ($schedulableQueues as $schedulableQueue) {
@@ -30,10 +33,10 @@ class Scheduler
                     $params = $scheduleConfig->params;
                 }
 
-                $schedule->call(function () use ($schedulableQueue, $scheduleConfig) {
+                $schedule->call(function () use ($schedulableQueue, $scheduleConfig, $dateNow) {
                     $className = $schedulableQueue->class_name;
 
-                    $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->name . '_' . date('Y-m-d-H-i');
+                    $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->name . '_' . $dateNow->format('Y-m-d-H-i');
 
                     if (\Cache::has($lockKey)) {
                         return;
