@@ -38,13 +38,11 @@ class Scheduler
 
                     $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->name . '_' . $dateNow->format('Y-m-d-H-i');
 
-                    if (\Cache::has($lockKey)) {
-                        return;
-                    }
-                    
                     $expiresAt = now()->addMinutes(10);
 
-                    \Cache::put($lockKey, '1', $expiresAt);
+                    if (!\Cache::add($lockKey, '1', $expiresAt)) {
+                        return;
+                    }
                     
                     if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
                         foreach($scheduleConfig->props as $prop) {
