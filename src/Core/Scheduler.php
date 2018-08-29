@@ -43,16 +43,20 @@ class Scheduler
                     if (!\Cache::add($lockKey, '1', $expiresAt)) {
                         return;
                     }
-                    
+
+                    if (isset($scheduleConfig->server) && $scheduleConfig->server !== gethostname()) {
+                        return;
+                    }
+
                     if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
                         foreach($scheduleConfig->props as $prop) {
-                            $job = (new $className());    
+                            $job = (new $className());
                             $job->setName($schedulableQueue->name);
                             $job->setProps($prop);
                             $job->dispatch();
                         }
                     } else {
-                        $job = (new $className());    
+                        $job = (new $className());
                         $job->setName($schedulableQueue->name);
                         $job->dispatch();
                     }
