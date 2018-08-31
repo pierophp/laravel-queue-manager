@@ -33,7 +33,7 @@ class Scheduler
                     $params = $scheduleConfig->params;
                 }
 
-                $schedule->call(function () use ($schedulableQueue, $scheduleConfig, $dateNow) {
+                $scheduleCall = $schedule->call(function () use ($schedulableQueue, $scheduleConfig, $dateNow) {
                     $className = $schedulableQueue->class_name;
 
                     $lockKey = 'QUEUE_LOCK_' . $schedulableQueue->name . '_' . $dateNow->format('Y-m-d-H-i');
@@ -49,7 +49,7 @@ class Scheduler
                     }
 
                     if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
-                        foreach($scheduleConfig->props as $prop) {
+                        foreach ($scheduleConfig->props as $prop) {
                             $job = (new $className());
                             $job->setName($schedulableQueue->name);
                             $job->setProps($prop);
@@ -60,8 +60,13 @@ class Scheduler
                         $job->setName($schedulableQueue->name);
                         $job->dispatch();
                     }
-                })->$method($params);
+                });
 
+                if (isset($scheduleConfig->avoid_overlapping) && (bool)$scheduleConfig->avoid_overlapping === true) {
+                    $scheduleCall->withoutOverlapping();
+                }
+
+                $scheduleCall->$method($params);
 
             } catch (\Throwable $e) {
                 event(new ScheduleError('Schedule Error - ' . $schedulableQueue->name . ' ' . $e->getMessage(), ['queue' => $schedulableQueue->name]));
