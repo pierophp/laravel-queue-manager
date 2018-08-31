@@ -63,7 +63,7 @@ class Scheduler
                 });
 
                 if (isset($scheduleConfig->avoid_overlapping) && (bool)$scheduleConfig->avoid_overlapping === true) {
-                    $scheduleCall->withoutOverlapping();
+                    $scheduleCall->name($schedulableQueue->name)->withoutOverlapping();
                 }
 
                 $scheduleCall->$method($params);
