@@ -2,8 +2,6 @@
 
 namespace LaravelQueueManager\Providers;
 
-use App\Jobs\RunJob;
-use App\Jobs\SshJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Support\ServiceProvider;
