@@ -171,24 +171,15 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
 
                 /** @var AbstractJob $job */
                 $job = new $className();
-                $job->setName($queue->name);
 
-                if ($job instanceof RunJob) {
-                    $job->setService($queue->service);
-                    $job->setData($queue->data);
-                    $job->setUrl($queue->url);
-                    $job->setMethod($queue->method);
-                    $job->setId($queue->id ?? null);
-                }
+                foreach ($queue as $key => $config) {
+                    $method = 'set' . ucfirst($key);
 
-                if ($job instanceof SshJob) {
-                    if (empty($queue->command)) {
-                        throw new \Exception('Command can not be empty');
+                    if (!method_exists($job, "{$method}")) {
+                        continue;
                     }
 
-                    $job->setCommand($queue->command);
-                    $job->setHost($queue->host);
-                    $job->setId($queue->id ?? null);
+                    $job->$method($config);
                 }
 
                 $delaySeconds = 0;
