@@ -8,11 +8,10 @@ class AfterQueueError
 
     public $context;
 
-    public function __construct($message, $context = [])
+    public function __construct(string $message, array $context = [])
     {
         $this->message = $message;
 
         $this->context = $context;
     }
-
 }
