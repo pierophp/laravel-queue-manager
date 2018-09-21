@@ -82,6 +82,50 @@ To the job work correctly, it is necessary generate a row in the queue_config ta
 | delay           | The delay to the next execution (Not implemented yet)                                                                                                                                              |
 | connection      | The connection name of the queue provider. (If null = default)                                                                                                                                     |
 | aggregator      | The aggregator is used to group the queues in a report                                                                                                                                             |
+| config          | The config is used to configure a dynamic functionality. Example json below                                                                                                                        |
+
+##### Config field example
+
+```
+{
+  "nextQueues":{
+    "onError":[
+      {
+        "url":"url/test",
+        "data":{
+          "param":value
+        },
+        "name":"QUEUE_NAME",
+        "method":"POST",
+        "service":"SERVICE",
+        "delay_seconds":1
+      },
+      {
+        "url":"url/test",
+        "data":{
+          "param":value
+        },
+        "name":"QUEUE_NAME",
+        "method":"GET",
+        "service":"SERVICE",
+        "delay_seconds":1
+      }
+    ],
+    "onSuccess":[
+      {
+        "url":"url/test",
+        "data":{
+          "param":value
+        },
+        "name":"QUEUE_NAME",
+        "method":"POST",
+        "service":"SERVICE",
+        "delay_seconds":1
+      }
+    ]
+  }
+}
+```
 
 ### Config
 
