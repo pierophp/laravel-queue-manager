@@ -53,41 +53,23 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         $this->commands('queue-manager.work');
 
         \Queue::after(function(JobProcessed $event) {
-            $queueName = $event->job->getQueue();
+            $nextQueues = $this->getNextQueues($event->job, 'onSuccess');
 
-            /** @var QueueConfig $queueConfig */
-            $queueConfig = QueueConfigRepository::findOneByName($queueName);
-
-            if(!$queueConfig) {
-                throw new \Exception(sprintf('Queue config for %s not found', $queueName));
-            }
-
-            $config = json_decode($queueConfig->config);
-
-            if (!isset($config->nextQueues) || !isset($config->nextQueues->onSuccess)) {
+            if (!$nextQueues) {
                 return;
             }
 
-            $this->dispatchNextQueues($queueName, $config->nextQueues->onSuccess);
+            $this->dispatchNextQueues($event->job->getQueue(), $nextQueues);
         });
 
         \Queue::failing(function(JobFailed $event) {
-            $queueName = $event->job->getQueue();
+            $nextQueues = $this->getNextQueues($event->job, 'onError');
 
-            /** @var QueueConfig $queueConfig */
-            $queueConfig = QueueConfigRepository::findOneByName($queueName);
-
-            if(!$queueConfig) {
-                throw new \Exception(sprintf('Queue config for %s not found', $queueName));
-            }
-
-            $config = json_decode($queueConfig->config);
-
-            if (!isset($config->nextQueues) || !isset($config->nextQueues->onError)) {
+            if (!$nextQueues) {
                 return;
             }
 
-            $this->dispatchNextQueues($queueName, $config->nextQueues->onError);
+            $this->dispatchNextQueues($event->job->getQueue(), $nextQueues);
         });
     }
 
@@ -144,6 +126,43 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
     }
 
     /**
+     * @param $job
+     * @param $onSuccessError 'onSuccess|onError'
+     */
+    protected function getNextQueues($job, $onSuccessOrError = 'onSuccess')
+    {
+        if (!$job) {
+            return;
+        }
+
+        $queueName = $job->getQueue();
+
+        /** @var QueueConfig $queueConfig */
+        $queueConfig = QueueConfigRepository::findOneByName($queueName);
+
+        if (!$queueConfig) {
+            throw new \Exception(sprintf('Queue config for %s not found', $queueName));
+        }
+
+        $config = json_decode($queueConfig->config);
+
+        $nextQueues = null;
+
+        if (isset($config->nextQueues) && isset($config->nextQueues->$onSuccessOrError)) {
+            $nextQueues = $config->nextQueues->$onSuccessOrError;
+        }
+
+        $payload = json_decode($job->getRawBody());
+        $data = unserialize($payload->data->command);
+
+        if (isset($data->data['nextQueues']) && isset($data->data['nextQueues'][$onSuccessOrError])) {
+            $nextQueues = $data->data['nextQueues'][$onSuccessOrError];
+        }
+
+        return $nextQueues;
+    }
+
+    /**
      * @param $parentQueue
      * @param $queues
      */
@@ -154,6 +173,8 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         }
 
         foreach ($queues as $queue) {
+            $queue = is_array($queue) ? (object) $queue : $queue;
+
             try {
                 $queueConfig = QueueConfigRepository::findOneByName($queue->name);
 
