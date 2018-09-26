@@ -69,7 +69,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
                 return;
             }
 
-            $this->dispatchNextQueues($event->job->getQueue(), $nextQueues);
+            $this->dispatchNextQueues($event->job, $nextQueues);
         });
     }
 
@@ -165,12 +165,12 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
     }
 
     /**
-     * @param $parentQueue
+     * @param $parentJob
      * @param $queues
      */
-    protected function dispatchNextQueues($parentQueue, $queues)
+    protected function dispatchNextQueues($parentJob, $queues)
     {
-        if (!$parentQueue || !$queues) {
+        if (!$parentJob || !$queues) {
             return;
         }
 
@@ -184,8 +184,17 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
                     throw new \Exception('Queue config not found');
                 }
 
-                if ($parentQueue === $queue->name) {
-                    throw new \Exception('Next queue cannot be the same as parent');
+                if ($parentJob->getQueue() === $queue->name) {
+                    $parentJobPayload = json_decode($parentJob->getRawBody());
+                    $parentJobData = unserialize($parentJobPayload->data->command);
+                    $parentJobDataCompare = md5(json_encode(array_except((array) $parentJobData->data, ['nextQueues'])));
+
+                    $queueData = (array) $queue->data;
+                    $queueDataCompare = md5(json_encode(array_except($queueData, ['nextQueues'])));
+
+                    if ($queueDataCompare === $parentJobDataCompare) {
+                        throw new \Exception('Next queue cannot be the same as parent with the same data params');
+                    }
                 }
 
                 $className = $queueConfig->class_name;
