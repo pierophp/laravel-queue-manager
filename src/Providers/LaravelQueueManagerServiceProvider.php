@@ -155,6 +155,10 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         $payload = json_decode($job->getRawBody());
         $data = unserialize($payload->data->command);
 
+        if (!isset($data->data)) {
+            return $nextQueues;
+        }
+
         $data = json_decode(json_encode($data->data));
 
         if (isset($data->nextQueues) && isset($data->nextQueues->$onSuccessOrError)) {
