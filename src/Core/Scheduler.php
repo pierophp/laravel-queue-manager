@@ -49,6 +49,7 @@ class Scheduler
                     }
 
                     if ($scheduleConfig->props && is_array($scheduleConfig->props)) {
+
                         foreach ($scheduleConfig->props as $prop) {
                             $job = (new $className());
                             $job->setName($schedulableQueue->name);
