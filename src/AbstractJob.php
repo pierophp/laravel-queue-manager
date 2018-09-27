@@ -104,7 +104,7 @@ abstract class AbstractJob implements ShouldQueue
         }
 
         if (empty($this->id)) {
-            $this->id = md5(uniqid(rand(), true))
+            $this->id = md5(uniqid(rand(), true));
         }
     }
 
