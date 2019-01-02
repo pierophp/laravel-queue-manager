@@ -121,16 +121,20 @@ abstract class AbstractJob implements ShouldQueue
             return $this->connectionName;
         }
 
-        $queueConfig = QueueConfigRepository::findOneByName($this->getName());
-        if (!$queueConfig) {
+        try {
+            $queueConfig = QueueConfigRepository::findOneByName($this->getName());
+            if (!$queueConfig) {
+                return 'default';
+            }
+
+            if ($queueConfig->connection) {
+                return $queueConfig->connection;
+            }
+
+            return 'default';
+        } catch (\Throwable $e) {
             return 'default';
         }
-
-        if ($queueConfig->connection) {
-            return $queueConfig->connection;
-        }
-
-        return 'default';
     }
 
 }
