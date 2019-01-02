@@ -20,6 +20,8 @@ abstract class AbstractJob implements ShouldQueue
     private $connectionName;
 
     protected $name;
+    
+    public $id;
 
     abstract function execute();
 
@@ -99,6 +101,10 @@ abstract class AbstractJob implements ShouldQueue
                 $value = json_encode($value);
             }
             $this->$key = $value;
+        }
+
+        if (empty($this->id)) {
+            $this->id = md5(uniqid(rand(), true));
         }
     }
 
