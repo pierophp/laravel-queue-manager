@@ -11,4 +11,6 @@ return [
     'supervisor_user' => 'docker',
     'supervisor_update_timeout' => 600,
     'fallback_connections' => [],
+    'default_job_class_name' => '\\LaravelQueueManager\\AbstractJob',
+    'cache_store' => 'file',
 ];
