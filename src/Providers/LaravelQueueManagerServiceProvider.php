@@ -125,7 +125,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         });
     }
 
-    protected function getDatabaseNextQueues($queueName) 
+    protected function getDatabaseNextQueues($queueName, $onSuccessOrError) 
     {
         $cacheKey = 'DATABASE_NEXT_QUEUES_' . $queueName;
         $cacheStore = config('queue_manager.cache_store');
@@ -173,7 +173,7 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
 
         $queueName = $job->getQueue();
 
-        $nextQueues = $this->getDatabaseNextQueues($queueName);
+        $nextQueues = $this->getDatabaseNextQueues($queueName, $onSuccessOrError);
 
         $payload = json_decode($job->getRawBody());
         $data = unserialize($payload->data->command);
