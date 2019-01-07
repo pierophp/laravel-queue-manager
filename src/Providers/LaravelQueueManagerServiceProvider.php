@@ -171,7 +171,8 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
             return;
         }
 
-        $queueName = $job->getQueue();
+        $parentQueue = unserialize($job->payload()['data']['command']);
+        $queueName = $parentQueue->getName();
 
         $nextQueues = $this->getDatabaseNextQueues($queueName, $onSuccessOrError);
 
