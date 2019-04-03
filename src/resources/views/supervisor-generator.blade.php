@@ -16,14 +16,14 @@ stopsignal=TERM
 @foreach($fallbackConnections as $fallbackConnection)
 [program:laravel-worker-fallback-{{$fallbackConnection}}]
 process_name=%(program_name)s_%(process_num)02d
-command=php {{config('queue_manager.artisan_path')}} queue-manager:work --sleep=60 --tries=5 --timeout=600 {{ $fallbackConnection }}
+command=php {{config('queue_manager.artisan_path')}} queue-manager:work --sleep=60 --tries=5 --timeout=900 {{ $fallbackConnection }}
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}
 numprocs=1
 redirect_stderr=true
 stdout_logfile={{config('queue_manager.log_path')}}
-stopwaitsecs=600
+stopwaitsecs=900
 stopsignal=TERM
 
 @endforeach
