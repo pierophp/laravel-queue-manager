@@ -44,7 +44,9 @@ class SupervisorGenerator
 
         $supervisorConfig = View::make('laravel_queue_manager::supervisor-generator', [
             'configs' => $configs,
-            'fallbackConnections' => $fallbackConnections,
+            'fallbackConnections' => array_filter($fallbackConnections, function ($name) {
+                return $name !== config('queue.default');
+            }),
         ]);
 
         $supervisorConfigOld = '';
