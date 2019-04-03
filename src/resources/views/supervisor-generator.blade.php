@@ -11,19 +11,19 @@ stdout_logfile={{config('queue_manager.log_path')}}
 stopwaitsecs={{ $config->timeout ? $config->timeout : 600 }}
 stopsignal=TERM
 
-@foreach($config->fallback_connections as $fallbackConnection)
-[program:laravel-worker-{{$config->name}}-fallback-{{$fallbackConnection}}]
+@endforeach
+
+@foreach($fallbackConnections as $fallbackConnection)
+[program:laravel-worker-fallback-{{$fallbackConnection}}]
 process_name=%(program_name)s_%(process_num)02d
-command=php {{config('queue_manager.artisan_path')}} queue-manager:work --queue={{$config->name}} --sleep=60 --tries={{ $config->max_attempts ? $config->max_attempts : 5 }} --timeout={{ $config->timeout ? $config->timeout : 0 }} {{ $fallbackConnection }}
+command=php {{config('queue_manager.artisan_path')}} queue-manager:work --sleep=60 --tries=5 --timeout=600 {{ $fallbackConnection }}
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}
-numprocs={{ $config->active ? 1 : 0 }}
+numprocs=1
 redirect_stderr=true
 stdout_logfile={{config('queue_manager.log_path')}}
-stopwaitsecs={{ $config->timeout ? $config->timeout : 600 }}
+stopwaitsecs=600
 stopsignal=TERM
-
-@endforeach
 
 @endforeach
