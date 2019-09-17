@@ -49,7 +49,6 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
         $this->commands('queue-manager.generate-config');
         $this->commands('queue-manager.generate-queue');
         $this->commands('queue-manager.show-jobs');
-        $this->commands('queue-manager.work');
 
         \Queue::after(function(JobProcessed $event) {
             $nextQueues = $this->getNextQueues($event->job, 'onSuccess');
