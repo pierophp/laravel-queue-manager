@@ -2,7 +2,12 @@
   "name": "pierophp/laravel-queue-manager",
   "description": "Laravel Queue Manager",
   "license": "MIT",
-  "keywords": ["laravel", "queue", "queue-manager", "supervisor"],
+  "keywords": [
+    "laravel",
+    "queue",
+    "queue-manager",
+    "supervisor"
+  ],
   "authors": [
     {
       "name": "Piero Giusti",
@@ -20,10 +25,10 @@
   },
   "require": {
     "php": ">=7.0.0",
-    "illuminate/bus": "^5.3",
-    "illuminate/database": "^5.3",
-    "illuminate/http": "^5.3",
-    "illuminate/queue": "^5.3",
-    "illuminate/view": "^5.3"
+    "illuminate/bus": "^5.3 || ^6.0",
+    "illuminate/database": "^5.3 || ^6.0",
+    "illuminate/http": "^5.3 || ^6.0",
+    "illuminate/queue": "^5.3 || ^6.0",
+    "illuminate/view": "^5.3 || ^6.0"
   }
 }
