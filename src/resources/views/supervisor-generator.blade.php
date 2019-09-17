@@ -1,7 +1,7 @@
 @foreach($configs as $config)
 [program:laravel-worker-{{$config->name}}]
 process_name=%(program_name)s_%(process_num)02d
-command=php {{config('queue_manager.artisan_path')}} queue-manager:work --queue={{$config->name}} --sleep={{ (int)$config->delay ? $config->delay : 1 }} --tries={{ $config->max_attempts ? $config->max_attempts : 5 }} --timeout={{ $config->timeout ? $config->timeout : 0 }} {{ $config->connection == 'default' ? '' : $config->connection }}
+command=php {{config('queue_manager.artisan_path')}} queue:work --queue={{$config->name}} --sleep={{ (int)$config->delay ? $config->delay : 1 }} --tries={{ $config->max_attempts ? $config->max_attempts : 5 }} --timeout={{ $config->timeout ? $config->timeout : 0 }} {{ $config->connection == 'default' ? '' : $config->connection }}
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}
@@ -16,7 +16,7 @@ stopsignal=TERM
 @foreach($fallbackConnections as $fallbackConnection)
 [program:laravel-worker-fallback-{{$fallbackConnection}}]
 process_name=%(program_name)s_%(process_num)02d
-command=php {{config('queue_manager.artisan_path')}} queue-manager:work --sleep=60 --tries=5 --timeout=900 {{ $fallbackConnection }}
+command=php {{config('queue_manager.artisan_path')}} queue:work --sleep=60 --tries=5 --timeout=900 {{ $fallbackConnection }}
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}

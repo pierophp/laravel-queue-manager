@@ -10,7 +10,6 @@ use LaravelQueueManager\AbstractJob;
 use LaravelQueueManager\Console\Commands\GenerateConfigCommand;
 use LaravelQueueManager\Console\Commands\GenerateQueueCommand;
 use LaravelQueueManager\Console\Commands\ShowJobsCommand;
-use LaravelQueueManager\Console\Commands\WorkCommand;
 use LaravelQueueManager\Core\Scheduler;
 use LaravelQueueManager\Core\Worker;
 use LaravelQueueManager\Events\AfterQueueError;
@@ -118,10 +117,6 @@ class LaravelQueueManagerServiceProvider extends ServiceProvider
 
         $this->app->singleton('queue-manager.show-jobs', function () {
             return new ShowJobsCommand();
-        });
-
-        $this->app->singleton('queue-manager.work', function () {
-            return new WorkCommand(new Worker(resolve('Illuminate\Queue\QueueManager'), resolve('Illuminate\Contracts\Events\Dispatcher'), resolve('Illuminate\Contracts\Debug\ExceptionHandler')));
         });
     }
 
