@@ -11,6 +11,10 @@ class Scheduler
 {
     public static function schedule(Schedule $schedule)
     {
+        /**
+         * CUSTOM SCHEDULE
+         */
+
         /** @var Carbon $dateNow */
         $dateNow = now();
         $schedulableQueues = QueueConfigRepository::findSchedulables();
@@ -73,6 +77,13 @@ class Scheduler
                 event(new ScheduleError('Schedule Error - ' . $schedulableQueue->name . ' ' . $e->getMessage(), ['queue' => $schedulableQueue->name]));
             }
         }
+
+        
+        /**
+         * RESTAR QUEUE EVERY HOUR
+         */
+
+        $schedule->command('queue:restart')->hourly();
     }
 
 }
