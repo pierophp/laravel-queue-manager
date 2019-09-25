@@ -26,6 +26,16 @@ class SupervisorGenerator
             return $name !== 'sync';
         });
 
+        $hostname = gethostname();
+
+        $configs = array_filter($configs, function ($config) use ($hostname) {
+            if (!$config->server_group) {
+                return true;
+            }
+            
+            return substr($hostname, 0, strlen($config->server_group)) === $config->server_group;
+        });
+
         foreach ($configs as $config) {
             $connectionName = config('queue.default');
             if ($config->connection && $config->connection !== 'default') {
