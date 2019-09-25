@@ -28,7 +28,7 @@ class SupervisorGenerator
 
         $hostname = gethostname();
 
-        $configs = array_filter($configs, function ($config) use ($hostname) {
+        $configs = $configs->filter(function ($config) use ($hostname) {
             if (!$config->server_group) {
                 return true;
             }
