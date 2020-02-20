@@ -50,7 +50,7 @@ class SupervisorGenerator
                 $calculatedInstances = round($size / $instancesFactor);
             }
 
-            $config->current_instances = min($calculatedInstances, $config->max_instances);
+            $config->current_instances = max(min($calculatedInstances, $config->max_instances ?? 1), $config->min_instances ?? 1);
             $config->save();
 
             $config->fallback_connections = array_filter($fallbackConnections, function ($name) use ($config) {
