@@ -36,11 +36,22 @@ class SupervisorGenerator
             return substr($hostname, 0, strlen($config->server_group)) === $config->server_group;
         });
 
+        $instancesFactor = 5;
+
         foreach ($configs as $config) {
             $connectionName = config('queue.default');
             if ($config->connection && $config->connection !== 'default') {
                 $connectionName = $config->connection;
             }
+
+            $size = \Queue::size($config->name);
+            $calculatedInstances = 1;
+            if ($size > 0) {
+                $calculatedInstances = round($size / $instancesFactor);
+            }
+
+            $config->current_instances = min($calculatedInstances, $config->max_instances);
+            $config->save();
 
             $config->fallback_connections = array_filter($fallbackConnections, function ($name) use ($config) {
                 $configConnection = $config->connection;

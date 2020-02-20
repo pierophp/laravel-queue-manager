@@ -5,7 +5,7 @@ command=php {{config('queue_manager.artisan_path')}} queue:work --queue={{$confi
 autostart=true
 autorestart=true
 user={{config('queue_manager.supervisor_user')}}
-numprocs={{ $config->active ? ($config->max_instances ? $config->max_instances : 1) : 0 }}
+numprocs={{ $config->active ? ($config->current_instances ? $config->current_instances : 1) : 0 }}
 redirect_stderr=true
 stdout_logfile={{config('queue_manager.log_path')}}
 stopwaitsecs={{ $config->timeout ? $config->timeout : 600 }}
