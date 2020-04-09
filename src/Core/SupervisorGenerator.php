@@ -81,19 +81,21 @@ class SupervisorGenerator
 
             $supervisorBin = config('queue_manager.supervisor_bin');
 
-            $process = new Process($supervisorBin . ' reread');
+            $process = new Process([$supervisorBin . ' reread']);
             $process->run();
 
             if (!$process->isSuccessful()) {
                 event(new ScheduleError($process->getOutput(), ['command' => 'reread']));
+                throw new \Exception('Supervisor Reread error ' . $process->getOutput());
             }
 
-            $process = new Process($supervisorBin . ' update');
+            $process = new Process([$supervisorBin . ' update']);
             $process->setTimeout(config('queue_manager.supervisor_update_timeout'));
             $process->run();
 
             if (!$process->isSuccessful()) {
                 event(new ScheduleError($process->getOutput(), ['command' => 'update']));
+                throw new \Exception('Supervisor Update error ' . $process->getOutput());
             }
 
         }
