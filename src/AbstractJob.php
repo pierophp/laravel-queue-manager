@@ -83,6 +83,10 @@ abstract class AbstractJob implements ShouldQueue
                     continue;
                 }
 
+                if ($fallbackConnection === 'database') {
+                    $this->onQueue('default');
+                }
+
                 try {
                     $this->onConnection($fallbackConnection);
                     $dispatcher = app(Dispatcher::class);
