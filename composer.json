@@ -25,10 +25,10 @@
   },
   "require": {
     "php": ">=7.0.0",
-    "illuminate/bus": "^5.3 || ^6.0 || ^7.0",
-    "illuminate/database": "^5.3 || ^6.0 || ^7.0",
-    "illuminate/http": "^5.3 || ^6.0 || ^7.0",
-    "illuminate/queue": "^5.3 || ^6.0 || ^7.0",
-    "illuminate/view": "^5.3 || ^6.0 || ^7.0"
+    "illuminate/bus": "^5.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+    "illuminate/database": "^5.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+    "illuminate/http": "^5.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+    "illuminate/queue": "^5.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+    "illuminate/view": "^5.3 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
   }
 }
